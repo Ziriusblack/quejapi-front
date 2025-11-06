@@ -1,0 +1,84 @@
+<nav class="bg-orange-400 shadow-lg sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+
+      <!-- Logo -->
+      <div class="flex items-center">
+        <h1 class="text-xl font-bold text-white">QuejAPP</h1>
+      </div>  
+
+      <!-- Navegación Desktop -->
+      <div class="hidden md:flex items-center space-x-6">
+        @for (item of navItems; track $index) {
+          <a 
+            [routerLink]="item.route"
+            routerLinkActive="bg-white text-orange-500 shadow-md"
+            [routerLinkActiveOptions]="{exact: true}"
+            class="px-4 py-2 rounded-lg text-sm text-orange-50 font-medium hover:bg-orange-500 hover:text-white transition">
+            {{ item.name }}
+          </a>
+        }
+      </div>
+
+      <!-- Usuario y Logout -->
+      <div class="hidden md:flex items-center space-x-4">
+        @if (isAuthenticated) {
+          <!-- Nombre de usuario en blanco -->
+           <div class="grid grid-cols-1 gap-0 text-right">
+            <span class="text-white font-medium">Hola! {{ getUserName() }}</span>
+            <span class="text-white text-sm">{{getUserRole()}}</span>
+           </div>
+          
+
+          <!-- Botón cerrar sesión blanco con texto naranja -->
+          <button 
+            (click)="logout()" 
+            class="bg-white text-orange-500 border border-orange-500 hover:bg-orange-100 px-4 py-2 rounded-lg text-sm font-medium transition">
+            Cerrar sesión
+          </button>
+        }
+      </div>
+
+      <!-- Botón Mobile -->
+      <div class="md:hidden">
+        <button (click)="toggleMobileMenu()" 
+          class="inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-orange-500">
+          <!-- Menú hamburguesa -->
+          <svg class="h-6 w-6" [class.hidden]="mobileMenuOpen" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <!-- Icono cerrar -->
+          <svg class="h-6 w-6" [class.hidden]="!mobileMenuOpen" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navegación Mobile -->
+  <div class="md:hidden" [class.hidden]="!mobileMenuOpen">
+    <div class="px-2 pt-2 pb-3 space-y-2 sm:px-3 bg-white shadow-md">
+      @for (item of navItems; track $index) {
+        <a 
+          [routerLink]="item.route"
+          (click)="navigate(item.route)"
+          routerLinkActive="bg-orange-500 text-white"
+          [routerLinkActiveOptions]="{exact: true}"
+          class="text-gray-700 hover:bg-orange-100 hover:text-orange-600 block px-3 py-2 rounded-md text-base font-medium">
+          {{ item.name }}
+        </a>
+      }
+      @if (isAuthenticated) {
+        <!-- Botón cerrar sesión en mobile -->
+        <button 
+          (click)="logout()" 
+          class="w-full bg-white text-orange-500 border border-orange-500 hover:bg-orange-100 px-3 py-2 rounded-md text-base font-medium transition">
+          Cerrar sesión
+        </button>
+      }
+    </div>
+  </div>
+</nav>

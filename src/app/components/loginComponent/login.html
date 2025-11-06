@@ -1,0 +1,86 @@
+<div
+  class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8 bg-gradient-to-br from-gray-50 via-white to-gray-100">
+
+  <!-- Card del login -->
+  <div class="sm:mx-auto sm:w-full sm:max-w-sm text-center">
+    <!-- Icono de inicio de sesión -->
+    <div
+      class="mx-auto w-12 h-12 flex items-center justify-center bg-gradient-to-br from-orange-400 to-orange-500 rounded-full shadow-lg">
+      <svg class="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+      </svg>
+    </div>
+
+    <h2 class="mt-6 text-center text-2xl font-bold tracking-tight text-gray-900">Inicia sesión en tu cuenta</h2>
+    <p class="mt-2 text-sm text-gray-600">Ingresa tus credenciales para continuar</p>
+  </div>
+
+  <!-- Formulario -->
+  <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+    <form [formGroup]="loginResquest" (ngSubmit)="onSubmit()"
+      class="space-y-6 bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+
+      <!-- Email -->
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-900 mb-1">Correo electrónico</label>
+        <input id="email" type="email" formControlName="email" required
+          class="block w-full px-3 py-2 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" />
+
+      </div>
+
+      <!-- Contraseña -->
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-900 mb-1">Contraseña</label>
+        <input id="password" type="password" formControlName="password" required
+          class="block w-full px-3 py-2 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" />
+
+      </div>
+
+      @if (errorMessage) {
+      <span class="flex items-center text-red-600 text-sm mt-1">
+        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" />
+        </svg>
+        {{ errorMessage }}
+      </span>
+      }
+
+      <!-- Botón -->
+      <div>
+        <button type="submit" [disabled]="!loginResquest.valid || isLoading"
+          class="flex w-full justify-center items-center rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 px-4 py-2 text-white font-semibold shadow hover:from-orange-600 hover:to-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 disabled:opacity-50 disabled:cursor-not-allowed">
+
+          <!-- Loading Spinner -->
+          @if(isLoading){
+          <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+            </path>
+          </svg>
+          }
+
+          @if(!isLoading){
+          <span>Iniciar sesión</span>
+          }
+          @if(isLoading){
+          <span>Iniciando sesión...</span>
+          }
+
+        </button>
+      </div>
+
+      <!-- Link registro -->
+      <p class="mt-6 text-center text-sm text-gray-600">
+        ¿No tienes una cuenta?
+        <a routerLink="/register/user" class="font-semibold text-orange-500 hover:text-orange-600 cursor-pointer">
+          Crear cuenta
+        </a>
+      </p>
+
+    </form>
+  </div>
+</div>

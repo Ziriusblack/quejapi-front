@@ -1,0 +1,441 @@
+<navigation-bar></navigation-bar>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="min-h-screen  p-4 md:p-8">
+        <!-- Header -->
+        <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6">📊 Dashboard de PQRS</h1>
+
+            <!-- Filtros de Fecha -->
+            <div class="flex flex-wrap gap-4 items-end">
+                <div class="flex flex-col gap-2">
+                    <label for="startDate" class="text-sm font-semibold text-gray-600">Desde:</label>
+                    <input type="date" id="startDate" [(ngModel)]="startDate"
+                        class="px-4 py-2.5 border-2 border-gray-200 rounded-lg text-sm focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all">
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <label for="endDate" class="text-sm font-semibold text-gray-600">Hasta:</label>
+                    <input type="date" id="endDate" [(ngModel)]="endDate"
+                        class="px-4 py-2.5 border-2 border-gray-200 rounded-lg text-sm focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all">
+                </div>
+
+                <button (click)="applyFilters()"
+                    class="px-6 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-indigo-700 transform hover:-translate-y-0.5 transition-all shadow-lg hover:shadow-xl">
+                    Aplicar
+                </button>
+                <button (click)="clearFilters()"
+                    class="px-6 py-2.5 bg-gray-200 text-gray-700 font-semibold rounded-lg hover:bg-gray-300 transition-all">
+                    Limpiar
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        @if (loading()) {
+        <div class="bg-white rounded-2xl shadow-xl p-16 text-center">
+            <div
+                class="inline-block w-12 h-12 border-4 border-gray-200 border-t-purple-600 rounded-full animate-spin mb-4">
+            </div>
+            <p class="text-gray-600 font-medium">Cargando estadísticas...</p>
+        </div>
+        }
+
+
+        <!-- Error State -->
+        @if (error()) {
+        <div class="bg-white rounded-2xl shadow-xl p-12 text-center">
+            <p class="text-red-600 font-semibold mb-4">⚠️ {{ error() }}</p>
+            <button (click)="loadStatistics()"
+                class="px-6 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-indigo-700 transition-all">
+                Reintentar
+            </button>
+        </div>
+        }
+
+
+        <!-- Content -->
+        @if (!loading() && !error() && statistics()) {
+        <div class="animate-fade-in">
+            <!-- Navigation Tabs -->
+            <div class="bg-white rounded-2xl shadow-lg p-2 mb-8 flex gap-2">
+                <button (click)="changeView('overview')"
+                    [class]="selectedView() === 'overview' ? 'flex-1 py-4 px-6 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-xl shadow-lg transition-all' : 'flex-1 py-4 px-6 text-gray-600 font-semibold rounded-xl hover:bg-gray-50 transition-all'">
+                    Vista General
+                </button>
+                <button (click)="changeView('employees')"
+                    [class]="selectedView() === 'employees' ? 'flex-1 py-4 px-6 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-xl shadow-lg transition-all' : 'flex-1 py-4 px-6 text-gray-600 font-semibold rounded-xl hover:bg-gray-50 transition-all'">
+                    Por Empleado
+                </button>
+                <button (click)="changeView('trends')"
+                    [class]="selectedView() === 'trends' ? 'flex-1 py-4 px-6 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-xl shadow-lg transition-all' : 'flex-1 py-4 px-6 text-gray-600 font-semibold rounded-xl hover:bg-gray-50 transition-all'">
+                    Tendencias
+                </button>
+            </div>
+
+            <!-- Overview View -->
+            @if(selectedView() === 'overview') {
+            <div class="space-y-8">
+                <!-- KPIs principales -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div
+                        class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transform hover:-translate-y-1 transition-all">
+                        <div class="flex items-center gap-4">
+                            <div class="text-5xl">📋</div>
+                            <div class="flex-1">
+                                <h3 class="text-sm font-semibold text-gray-600 mb-1">Total PQRS</h3>
+                                <p class="text-3xl font-bold text-gray-800">{{ statistics()!.totalPqrs }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transform hover:-translate-y-1 transition-all">
+                        <div class="flex items-center gap-4">
+                            <div class="text-5xl">✅</div>
+                            <div class="flex-1">
+                                <h3 class="text-sm font-semibold text-gray-600 mb-1">Cerradas</h3>
+                                <p class="text-3xl font-bold text-gray-800">{{ statistics()!.closedPqrs }}</p>
+                                <span
+                                    class="inline-block mt-2 px-3 py-1 bg-green-500 text-white text-xs font-bold rounded-full">
+                                    {{ statistics()!.resolutionRate }}%
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transform hover:-translate-y-1 transition-all">
+                        <div class="flex items-center gap-4">
+                            <div class="text-5xl">⏳</div>
+                            <div class="flex-1">
+                                <h3 class="text-sm font-semibold text-gray-600 mb-1">En Progreso</h3>
+                                <p class="text-3xl font-bold text-gray-800">{{ statistics()!.inProgressPqrs }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transform hover:-translate-y-1 transition-all">
+                        <div class="flex items-center gap-4">
+                            <div class="text-5xl">📂</div>
+                            <div class="flex-1">
+                                <h3 class="text-sm font-semibold text-gray-600 mb-1">Abiertas</h3>
+                                <p class="text-3xl font-bold text-gray-800">{{ statistics()!.openPqrs }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alertas -->
+                @if (statistics()!.expiredPqrs > 0 || statistics()!.nearExpirationPqrs > 0) {
+                <div class="space-y-4">
+                    @if (statistics()!.expiredPqrs > 0) {
+                    <div
+                        class="bg-red-50 border-l-4 border-red-500 rounded-xl p-6 flex items-center gap-4 animate-pulse">
+                        <span class="text-3xl">⚠️</span>
+                        <div class="flex-1">
+                            <p class="font-semibold text-red-800">
+                                <strong class="text-2xl">{{ statistics()!.expiredPqrs }}</strong> PQRS vencidas
+                                requieren
+                                atención urgente
+                            </p>
+                        </div>
+                    </div>
+                    }
+
+                    @if (statistics()!.nearExpirationPqrs > 0) {
+                    <div class="bg-yellow-50 border-l-4 border-yellow-500 rounded-xl p-6 flex items-center gap-4">
+                        <span class="text-3xl">⏰</span>
+                        <div class="flex-1">
+                            <p class="font-semibold text-yellow-800">
+                                <strong class="text-2xl">{{ statistics()!.nearExpirationPqrs }}</strong> PQRS próximas a
+                                vencer (menos de 3 días)
+                            </p>
+                        </div>
+                    </div>
+                    }
+
+                </div>
+                }
+
+
+                <!-- Métricas de Rendimiento -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-6">
+                    <!-- Tiempo de Resolución -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6">
+                        <h3 class="text-lg font-bold text-gray-800 mb-6 flex items-center gap-2">
+                            <span>⏱️</span> Tiempo de Resolución
+                        </h3>
+                        <div class="grid grid-cols-3 gap-4 mb-6">
+                            <div class="text-center">
+                                <span class="block text-xs text-gray-500 mb-1">Promedio</span>
+                                <span class="block text-xl font-bold text-gray-800">{{
+                                    statistics()!.averageDaysToResolve.toFixed(1) }}</span>
+                                <span class="block text-xs text-gray-500">días</span>
+                            </div>
+                            <div class="text-center">
+                                <span class="block text-xs text-gray-500 mb-1">Mínimo</span>
+                                <span class="block text-xl font-bold text-gray-800">{{ statistics()!.minDaysToResolve
+                                    }}</span>
+                                <span class="block text-xs text-gray-500">días</span>
+                            </div>
+                            <div class="text-center">
+                                <span class="block text-xs text-gray-500 mb-1">Máximo</span>
+                                <span class="block text-xl font-bold text-gray-800">{{ statistics()!.maxDaysToResolve
+                                    }}</span>
+                                <span class="block text-xs text-gray-500">días</span>
+                            </div>
+                        </div>
+
+                        <div class="pt-6 border-t-2 border-gray-100">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm font-semibold text-gray-600">Satisfacción</span>
+                                <span class="text-sm font-bold text-green-600">{{ statistics()!.satisfactionRate
+                                    }}%</span>
+                            </div>
+                            <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-green-500 to-green-600 rounded-full transition-all duration-500"
+                                    [style.width.%]="statistics()!.satisfactionRate">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PQRS por Estado -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6">
+                        <h3 class="text-lg font-bold text-gray-800 mb-6 flex items-center gap-2">
+                            <span>📊</span> Por Estado
+                        </h3>
+                        <div class="space-y-4">
+                            @for (status of getObjectKeys(statistics()!.pqrsByStatus); track $index) {
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="font-semibold text-gray-700">{{ status }}</span>
+                                    <span class="font-bold text-gray-800">{{ getObjectValue(statistics()!.pqrsByStatus,
+                                        status) }}</span>
+                                </div>
+                                <div class="h-6 bg-gray-200 rounded-full overflow-hidden">
+                                    <div [ngClass]="getStatusColor(status)"
+                                        class="h-full rounded-full transition-all duration-500 flex items-center justify-end pr-2"
+                                        [style.width.%]="getStatusPercentage(getObjectValue(statistics()!.pqrsByStatus, status))">
+                                    </div>
+                                </div>
+                            </div>
+                            }
+
+                        </div>
+                    </div>
+
+                    <!-- PQRS por Tipo -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6">
+                        <h3 class="text-lg font-bold text-gray-800 mb-6 flex items-center gap-2">
+                            <span>🏷️</span> Por Tipo
+                        </h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            @for (type of getObjectKeys(statistics()!.pqrsByType); track $index) {
+                            <div [ngClass]="getTypeColorClass(type)" class="rounded-xl p-4 text-white shadow-lg">
+                                <span class="block text-sm font-semibold mb-1">{{ type }}</span>
+                                <span class="block text-2xl font-bold">{{ getObjectValue(statistics()!.pqrsByType, type)
+                                    }}</span>
+                            </div>
+                            }
+
+                        </div>
+                    </div>
+
+                    <!-- PQRS por Categoría -->
+                    <div class="bg-white rounded-2xl shadow-lg p-6">
+                        <h3 class="text-lg font-bold text-gray-800 mb-6 flex items-center gap-2">
+                            <span>📁</span> Por Categoría
+                        </h3>
+                        <div class="space-y-3">
+                            @for (category of getObjectKeys(statistics()!.pqrsByCategory); track $index) {
+                            <div
+                                class="flex items-center justify-between p-3 bg-gray-50 rounded-lg border-l-4 border-purple-500">
+                                <span class="font-semibold text-gray-700 text-sm">{{ category }}</span>
+                                <span class="font-bold text-purple-600">{{ getObjectValue(statistics()!.pqrsByCategory,
+                                    category) }}</span>
+                            </div>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
+
+
+            <!-- Employees View -->
+            @if (selectedView() === 'employees') {
+            <div>
+                <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+                    <h2 class="text-3xl font-bold text-gray-800 flex items-center gap-3">
+                        <span>👥</span> Rendimiento por Empleado
+                    </h2>
+                    <p class="text-gray-600 mt-2">Top 10 empleados por PQRS resueltas</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                    @for (emp of statistics()!.topEmployees; track $index) {
+                    <div
+                        class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-2xl transform hover:-translate-y-1 transition-all relative overflow-hidden">
+
+                        <div
+                            [class]="$index < 3 ? 'absolute top-0 right-0 bg-gradient-to-br from-amber-400 to-orange-500 text-white px-4 py-2 rounded-bl-2xl font-bold text-lg shadow-lg' : 'absolute top-0 right-0 bg-gray-200 text-gray-700 px-4 py-2 rounded-bl-2xl font-bold text-lg'">
+                            #{{ $index + 1 }}
+                        </div>
+
+                        <div class="mb-6 pr-12">
+                            <h4 class="text-xl font-bold text-gray-800 mb-1">{{ emp.employeeName }}</h4>
+                            <p class="text-sm text-gray-500">{{ emp.employeeEmail }}</p>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-3 mb-6">
+                            <div class="text-center p-3 bg-gray-50 rounded-xl">
+                                <span class="block text-2xl font-bold text-gray-800">{{ emp.totalAssigned }}</span>
+                                <span class="block text-xs text-gray-600 font-semibold mt-1">Asignadas</span>
+                            </div>
+                            <div
+                                class="text-center p-3 bg-gradient-to-br from-purple-50 to-indigo-50 border-2 border-purple-500 rounded-xl">
+                                <span class="block text-2xl font-bold text-purple-700">{{ emp.totalResolved }}</span>
+                                <span class="block text-xs text-purple-600 font-semibold mt-1">Resueltas</span>
+                            </div>
+                            <div class="text-center p-3 bg-gray-50 rounded-xl">
+                                <span class="block text-2xl font-bold text-gray-800">{{
+                                    emp.averageResolutionTime.toFixed(1)
+                                    }}</span>
+                                <span class="block text-xs text-gray-600 font-semibold mt-1">Días Prom.</span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <div class="h-3 bg-gray-200 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full transition-all duration-500"
+                                    [style.width.%]="emp.resolutionRate">
+                                </div>
+                            </div>
+                            <p class="text-center text-sm font-bold text-purple-600">{{ emp.resolutionRate }}% de
+                                efectividad</p>
+                        </div>
+                    </div>
+                    }
+
+                </div>
+            </div>
+            }
+
+
+            <!-- Trends View -->
+            @if (selectedView() === 'trends') {
+            <div>
+                <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+                    <h2 class="text-3xl font-bold text-gray-800 flex items-center gap-3">
+                        <span>📈</span> Tendencias Mensuales
+                    </h2>
+                    <p class="text-gray-600 mt-2">Evolución de PQRS por mes</p>
+                </div>
+
+                <!-- Gráfico de Barras -->
+                <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+                    <div class="flex gap-4 mb-6">
+                        <div class="flex items-center gap-3 text-sm">
+                            <div class="flex items-center gap-2">
+                                <div class="w-6 h-3 bg-gradient-to-r from-blue-500 to-blue-600 rounded"></div>
+                                <span class="font-semibold text-gray-700">Recibidas</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="w-6 h-3 bg-gradient-to-r from-green-500 to-green-600 rounded"></div>
+                                <span class="font-semibold text-gray-700">Resueltas</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4">
+                        <div class="flex flex-col justify-between py-4 text-xs font-semibold text-gray-500">
+                            <span>{{ getMaxTrendValue() }}</span>
+                            <span>{{ (getMaxTrendValue() / 2).toFixed(0) }}</span>
+                            <span>0</span>
+                        </div>
+
+                        <div class="flex-1 flex items-end gap-6 p-4 bg-gray-50 rounded-xl min-h-80">
+                            @for (trend of statistics()!.monthlyTrends; track $index) {
+                            <div class="flex-1 flex flex-col items-center gap-2">
+                                <div class="w-full flex items-end justify-center gap-2 h-64">
+                                    <div class="w-5 bg-gradient-to-t from-blue-500 to-blue-600 rounded-t-lg hover:opacity-80 transition-all cursor-pointer shadow-lg"
+                                        [style.height.%]="getTrendBarHeight(trend.totalReceived)"
+                                        [title]="'Recibidas: ' + trend.totalReceived">
+                                    </div>
+                                    <div class="w-5 bg-gradient-to-t from-green-500 to-green-600 rounded-t-lg hover:opacity-80 transition-all cursor-pointer shadow-lg"
+                                        [style.height.%]="getTrendBarHeight(trend.totalResolved)"
+                                        [title]="'Resueltas: ' + trend.totalResolved">
+                                    </div>
+                                </div>
+                                <span class="text-xs font-semibold text-gray-600 text-center">{{
+                                    formatMonth(trend.month)
+                                    }}</span>
+                            </div>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabla de Tendencias -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th
+                                        class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                                        Mes</th>
+                                    <th
+                                        class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                                        Recibidas</th>
+                                    <th
+                                        class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                                        Resueltas</th>
+                                    <th
+                                        class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                                        Tiempo Prom.</th>
+                                    <th
+                                        class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                                        Eficiencia</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                @for (trend of statistics()!.monthlyTrends; track $index) {
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">
+                                        {{ formatMonth(trend.month) }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                        {{ trend.totalReceived }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                        {{ trend.totalResolved }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                        {{ trend.averageResolutionTime.toFixed(1) }} días
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span [ngClass]="getEfficiencyClass(trend.totalReceived, trend.totalResolved)"
+                                            class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full">
+                                            {{ calculateEfficiency(trend.totalReceived, trend.totalResolved) }}%
+                                        </span>
+                                    </td>
+                                </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            }
+
+        </div>
+        }
+
+    </div>
+</div>

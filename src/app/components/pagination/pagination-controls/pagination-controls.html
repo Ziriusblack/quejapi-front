@@ -1,0 +1,66 @@
+<nav class="flex flex-col items-center gap-4 py-4">
+    @if (totalPages >= 1) {
+    <!-- Pagination Buttons -->
+    <ul class="flex items-center gap-1">
+        <!-- First Page -->
+        <li>
+            <button
+                class="px-3 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white transition-colors"
+                aria-label="First page" (click)="firstPage()" [disabled]="currentPage === 1">
+                &laquo;&laquo;
+            </button>
+        </li>
+
+        <!-- Previous Page -->
+        <li>
+            <button
+                class="px-3 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white transition-colors"
+                aria-label="Previous page" (click)="prevPage()" [disabled]="currentPage === 1">
+                &laquo;
+            </button>
+        </li>
+
+        <!-- Page Numbers -->
+        @for (item of pageRange; track $index) {
+        <li>
+            <button class="min-w-[40px] px-3 py-2 rounded-lg border transition-colors" [class]="item === currentPage 
+                            ? 'bg-[#E25E0C] border-[#E25E0C] text-white font-semibold' 
+                            : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'" (click)="goToPage(item)">
+                {{ item }}
+            </button>
+        </li>
+        }
+
+        <!-- Next Page -->
+        <li>
+            <button
+                class="px-3 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white transition-colors"
+                aria-label="Next page" (click)="nextPage()" [disabled]="currentPage === totalPages">
+                &raquo;
+            </button>
+        </li>
+
+        <!-- Last Page -->
+        <li>
+            <button
+                class="px-3 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white transition-colors"
+                aria-label="Last page" (click)="lastPage()" [disabled]="currentPage === totalPages">
+                &raquo;&raquo;
+            </button>
+        </li>
+    </ul>
+
+    <!-- Page Size Selector -->
+    <div class="flex items-center gap-3">
+        <label for="pageSizeSelect" class="text-sm font-medium text-gray-700">
+            Elementos por página:
+        </label>
+        <select id="pageSizeSelect" [value]="pageSize" (change)="onPageSizeChange($event)"
+            class="px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#E25E0C] focus:border-[#E25E0C] cursor-pointer">
+            @for (size of pageSizeOptions; track $index) {
+            <option [value]="size">{{ size }}</option>
+            }
+        </select>
+    </div>
+    }
+</nav>

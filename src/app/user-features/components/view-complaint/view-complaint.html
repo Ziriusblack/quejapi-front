@@ -1,0 +1,55 @@
+<navigation-bar></navigation-bar>
+
+<div class="max-w-5xl mx-auto p-6">
+  <h1 class="text-2xl font-bold text-orange-500 mb-6">Detalles del Radicado</h1>
+
+  <!-- Loading Indicator -->
+  @if (loading) {
+    <div class="loading-indicator text-center text-gray-600 p-4 bg-gray-100 rounded-lg shadow">
+      <p>Cargando información del radicado...</p>
+    </div><br>
+  }
+
+  <!-- Error Message -->
+  @if (error) {
+    <div class="error-message text-center text-red-600 font-medium bg-red-100 p-4 rounded-lg shadow">
+      <p>{{ error }}</p>
+    </div><br>
+  }
+
+  <!-- Complaint Details -->
+  @if (!loading && !error && complaint) {
+    <div class="bg-white shadow-lg rounded-xl p-6 space-y-4">
+      <h2 class="text-xl font-semibold text-gray-800">Detalles del Radicado</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <p><span class="font-medium text-gray-700">ID del Radicado:</span> {{ complaint.reference }}</p>
+        <p><span class="font-medium text-gray-700">Nombre del Usuario:</span> {{ showUserFullName(complaint.userProfile) }}</p>
+        <p><span class="font-medium text-gray-700">Correo Electrónico:</span> {{ showUserEmail(complaint.userProfile) }}</p>
+        <p><span class="font-medium text-gray-700">Estado:</span> {{ showStatusName(complaint.status) }}</p>
+        <p><span class="font-medium text-gray-700">Tipo:</span> {{ showTypeName(complaint.type) }}</p>
+        <p><span class="font-medium text-gray-700">Categoría:</span> {{ showCategoryName(complaint.category) }}</p>
+        <p class="col-span-2"><span class="font-medium text-gray-700">Asunto:</span> {{ complaint.subject }}</p>
+        <p class="col-span-2"><span class="font-medium text-gray-700">Descripción:</span> {{ complaint.description }}</p>
+        <p><span class="font-medium text-gray-700">Fecha de Creación:</span> {{ complaint.recievedDate | date:'short' }}</p>
+        <p><span class="font-medium text-gray-700">Última Actualización:</span> {{ complaint.updatedDate | date:'short' }}</p>
+      </div>
+
+      <!-- Historial -->
+      @if (complaint.traceability && complaint.traceability.length > 0) {
+        <div class="mt-6">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">Historial de Cambios</h3>
+          <ul class="space-y-2">
+            @for (trace of complaint.traceability; track $index) {
+              <li class="bg-gray-50 border-l-4 border-orange-500 p-3 rounded-md shadow-sm">
+                <strong class="text-orange-600">{{ trace.date | date:'short' }}:</strong> 
+                {{ trace.status }} realizado por 
+                <span class="font-medium">{{ showPerformedBy(trace) }}</span>
+              </li>
+            }
+          </ul>
+        </div>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,194 @@
+<navigation-bar></navigation-bar>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-gray-50">
+    <div class="min-h-screen px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Search Header -->
+        <div class="mb-6">
+            <h2 class="text-2xl font-bold text-gray-900">Buscar Quejas</h2>
+        </div>
+
+        <!-- Search Form -->
+        <div class="bg-white shadow rounded-lg p-6 mb-6">
+            <form [formGroup]="searchForm" (ngSubmit)="searchComplaints()"
+                class="grid grid-cols-1 sm:grid-cols-8 gap-4 items-end">
+
+                <!-- Busqueda -->
+                <div class="flex flex-col  sm:col-span-5">
+                    <label for="searchTerm" class="text-sm font-medium text-gray-700 mb-1">Búsqueda</label>
+                    <input id="searchTerm" type="text" formControlName="searchTerm" placeholder="Asunto o radicado..."
+                        class="px-3 py-2 border rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent" />
+                </div>
+
+                <!-- Estado -->
+                <div class="flex flex-col sm:col-span-2">
+                    <label for="status" class="text-sm font-medium text-gray-700 mb-1">Estado</label>
+                    <select id="status" formControlName="status"
+                        class="px-3 py-2 border rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                        <option value="">Todos</option>
+                        @for (item of statusOptions; track item.value) {
+                        <option [value]=item.value>{{ item.label }}</option>
+                        }
+                    </select>
+                </div>
+
+                <!-- Botón Buscar -->
+                <div class="flex justify-start sm:justify-end sm:col-span-1">
+                    <button type="submit"
+                        class=" flex flex-row gap-x-2 bg-orange-500 text-white px-4 py-2 rounded-lg shadow hover:bg-orange-600 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-search-icon lucide-search">
+                            <path d="m21 21-4.34-4.34" />
+                            <circle cx="11" cy="11" r="8" />
+                        </svg>
+                        <span>Buscar</span>                       
+                    </button>
+                </div>
+
+            </form>
+        </div>
+
+        <!-- Loading Indicator -->
+        @if (loading) {
+        <div class="text-center py-4 bg-white shadow rounded-lg mb-6">
+            <p class="text-gray-500">Cargando quejas...</p>
+        </div>
+        }
+
+        <!-- Error Message -->
+        @if (error) {
+        <div class="text-center py-4 bg-red-50 text-red-700 shadow rounded-lg mb-6">
+            <p>{{ error }}</p>
+        </div>
+        }
+
+        <!-- Results Cards -->
+        @if (!loading && !error) {
+        <div class="mb-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">Resultados ({{ totalItems }})</h3>
+
+            @if (complaints.length > 0) {
+            <!-- Grid de Cards Responsivo -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @for (complaint of complaints; track $index) {
+                <div
+                    class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden border border-gray-200">
+                    <!-- Header de la Card -->
+                    <div class="bg-gradient-to-r from-orange-500 to-orange-600 px-4 py-3">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-medium text-orange-100 uppercase tracking-wide">Radicado</p>
+                                <p class="text-white font-bold text-lg">{{ complaint.reference }}</p>
+                            </div>
+                            <span [class]="classForStatus(complaint.status)">
+                                {{ labelForStatus(complaint.status) }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Contenido de la Card -->
+                    <div class="p-4 space-y-3">
+                        <!-- Asunto -->
+                        <div>
+                            <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Asunto</p>
+                            <p class="text-gray-900 font-medium text-sm line-clamp-2">{{ complaint.subject }}</p>
+                        </div>
+
+                        <!-- Tiempo Estimado -->
+                        <div>
+                            <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Tiempo Estimado
+                            </p>
+                            <div class="flex items-center gap-2">
+                                @if (complaint.prediction === 'MuyRapido') {
+                                <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                <span class="text-sm font-semibold text-green-700">Muy Rápido</span>
+                                }
+                                @else if (complaint.prediction === 'Rapido') {
+                                <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v3.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 10.586V7z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                <span class="text-sm font-semibold text-blue-700">Rápido</span>
+                                }
+                                @else if (complaint.prediction === 'Lento') {
+                                <svg class="w-5 h-5 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v3.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 10.586V7z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                <span class="text-sm font-semibold text-yellow-700">Lento</span>
+                                }
+                                @else if (complaint.prediction === 'MuyLento') {
+                                <svg class="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v3.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 10.586V7z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                <span class="text-sm font-semibold text-red-700">Muy Lento</span>
+                                }
+                                @else {
+                                <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                <span class="text-sm font-medium text-gray-600">Por Determinar</span>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Fecha de Creación -->
+                        <div>
+                            <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Fecha de Creación
+                            </p>
+                            <div class="flex items-center gap-2 text-gray-700">
+                                <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                                <span class="text-sm">{{ complaint.recievedDate | date:'dd/MM/yyyy, h:mm a'}}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer de la Card con Botón -->
+                    <div class="px-4 py-3 bg-gray-50 border-t border-gray-200">
+                        <button (click)="viewComplaint(complaint.id)"
+                            class="w-full bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                <path fill-rule="evenodd"
+                                    d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            Ver Detalles
+                        </button>
+                    </div>
+                </div>
+                }
+            </div>
+            }
+            @else {
+            <div class="bg-white rounded-lg shadow p-8 text-center">
+                <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <p class="text-gray-500 text-sm italic">No se encontraron resultados.</p>
+            </div>
+            }
+        </div>
+        }
+
+        <!-- Pagination -->
+        <app-pagination-controls [currentPage]="page" [totalItems]="totalItems" [pageSize]="pageSize"
+            [pageSizeOptions]="[5,10,20,50]" (pageChange)="onPageChange($event)"
+            (pageSizeChange)="onPageSizeChange($event)">
+        </app-pagination-controls>
+    </div>
+</div>
