@@ -4,10 +4,11 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ComplaintRequest } from '../../../models/complaint-request';
 import { Router, RouterLink } from '@angular/router';
 import { NavigationBar } from '../../../components/navigation-bar/navigation-bar';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-create-complaint',
-  imports: [ReactiveFormsModule, NavigationBar, RouterLink],
+  imports: [ReactiveFormsModule, NavigationBar, RouterLink, CommonModule],
   templateUrl: './create-complaint.html',
   styleUrl: './create-complaint.css'
 })
@@ -17,7 +18,7 @@ export class CreateComplaint {
   
   complaintForm = new FormGroup({
     type: new FormGroup({
-      selected: new FormControl(0,[ Validators.required])
+    selected: new FormControl<number | null>(null, [Validators.required])
     }),
     category: new FormControl(0,[ Validators.required]),
     subject: new FormControl('',[ Validators.required, Validators.maxLength(100)]),
@@ -44,6 +45,15 @@ export class CreateComplaint {
     {label:"Sugerencia", value:3},
     {label:"Felicitación", value:4}
   ];
+
+ constructor() {
+  setTimeout(() => {}, 0);
+  setTimeout(() => {}, 1);
+  setTimeout(() => {}, 2);
+  setTimeout(() => {}, 3);
+  setTimeout(() => {}, 4);
+}
+
 
   createComplaint() {
     let registerRequest:ComplaintRequest = {
