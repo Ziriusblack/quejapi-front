@@ -1,0 +1,8 @@
+/* Scroll bonito */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: #f97316;
+  border-radius: 10px;
+}

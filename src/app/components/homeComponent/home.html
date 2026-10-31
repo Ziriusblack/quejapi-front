@@ -1,0 +1,289 @@
+<navigation-bar></navigation-bar>
+
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
+  <div class="container mx-auto px-4 py-4">
+    <div class="grid lg:grid-cols-2 gap-8 items-center min-h-[calc(100vh-4rem)]">
+
+      <!-- Lado Izquierdo - Logo y Contenido -->
+      <div class="flex flex-col justify-center space-y-4 px-4 lg:px-12">
+        <!-- Logo -->
+        <div class="space-y-4">
+          <div class="flex justify-center">
+            <img src="assets/logo.png" alt="Logo QuejApp"
+              class="w-70 h-70  group-hover:opacity-100 transition-opacity duration-300">            
+          </div>
+
+          <!-- Eslogan -->
+          <p class="text-2xl text-gray-700 font-semibold leading-relaxed">
+            Gestión inteligente de PQRS para <span class="text-orange-700">Transcaribe</span>
+          </p>
+          <p class="text-lg text-gray-600">
+            Conectando a los ciuddadanos de Cartagena con un mejor servicio de transporte
+          </p>
+        </div>
+
+        <!-- Características -->
+        <div class="space-y-4">
+          @for(feature of features; track $index){
+          <div class="flex items-start space-x-3 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+            @if(feature.icon === 'zap'){
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-orange-600 flex-shrink-0 mt-1" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+            }
+            @if(feature.icon === 'shield'){
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-orange-600 flex-shrink-0 mt-1" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            }
+            @if(feature.icon === 'users'){
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-orange-600 flex-shrink-0 mt-1" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            }
+            <div>
+              <h3 class="font-semibold text-gray-800">{{ feature.title }}</h3>
+              <p class="text-gray-600 text-sm">{{ feature.description }}</p>
+            </div>
+          </div>
+          }
+
+        </div>
+
+        <!-- CTA Button -->
+        <div class="pt-4">
+          <a routerLink="/login"
+            class="bg-gradient-to-r from-orange-600 to-orange-700 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+            Comenzar Ahora
+        </a>
+        </div>
+      </div>
+
+      <!-- Lado Derecho - Collage de Imágenes -->
+      <div class="grid grid-cols-2 gap-4 h-full">
+        @for(image of collageImages; track $index){
+        <div
+          class="rounded-2xl shadow-xl overflow-hidden relative group hover:scale-105 transition-transform duration-300"
+          [ngClass]="{
+               'bg-gradient-to-br from-blue-400 to-blue-600':$index === 0,
+               'bg-gradient-to-br from-indigo-400 to-indigo-600': $index === 1,
+               'bg-gradient-to-br from-cyan-400 to-cyan-600': $index=== 2,
+               'bg-gradient-to-br from-purple-400 to-purple-600':$index === 3
+             }">
+          <img [src]="image.src" [alt]="image.alt"
+            class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-300">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+            <p class="text-white font-semibold text-lg">{{ image.title }}</p>
+          </div>
+        </div>
+        }
+
+      </div>
+    </div>
+  </div>
+  <!-- Cards estadísticas -->
+ <div class="container mx-auto px-4 py-12">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+  <!-- Card 1: PQRS Recibidas -->
+  <div
+    class="bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-center border border-gray-100 hover:shadow-lg transition">
+    <div class="w-12 h-12 flex items-center justify-center bg-orange-500 rounded-full shadow-md">
+      <!-- Icono Inbox -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24"
+        stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M20 13V7a2 2 0 00-2-2h-4V3H10v2H6a2 2 0 00-2 2v6m16 0v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6m16 0H4" />
+      </svg>
+    </div>
+    <h3 class="mt-4 text-lg font-semibold text-gray-800">PQRS Recibidas</h3>
+    <p class="mt-1 text-2xl font-bold text-orange-600">
+      {{ statistics()?.totalPqrs || 0 }}
+    </p>  </div>
+
+  <!-- Card 2: Resueltas -->
+  <div
+    class="bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-center border border-gray-100 hover:shadow-lg transition">
+    <div class="w-12 h-12 flex items-center justify-center bg-green-500 rounded-full shadow-md">
+      <!-- Icono Check -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24"
+        stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+      </svg>
+    </div>
+    <h3 class="mt-4 text-lg font-semibold text-gray-800">Resueltas</h3>
+    <p class="mt-1 text-2xl font-bold text-green-600">
+      {{ statistics()?.closedPqrs || 0 }}
+    </p>  </div>
+
+  <!-- Card 3: Días Promedio -->
+  <div
+    class="bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-center border border-gray-100 hover:shadow-lg transition">
+    <div class="w-12 h-12 flex items-center justify-center bg-blue-500 rounded-full shadow-md">
+      <!-- Icono Reloj -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24"
+        stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    </div>
+    <h3 class="mt-4 text-lg font-semibold text-gray-800">Días Promedio</h3>
+    <p class="mt-1 text-2xl font-bold text-blue-600">
+      {{ statistics()?.averageDaysToResolve || 0 }} días
+</p>  </div>
+
+  <!-- Card 4: Satisfacción -->
+  <div
+    class="bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-center border border-gray-100 hover:shadow-lg transition">
+    <div class="w-12 h-12 flex items-center justify-center bg-yellow-500 rounded-full shadow-md">
+      <!-- Icono Estrella -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24"
+        stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.97a1 1 0 00.95.69h4.174c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.97c.3.921-.755 1.688-1.54 1.118l-3.38-2.455a1 1 0 00-1.175 0l-3.38 2.455c-.784.57-1.838-.197-1.539-1.118l1.287-3.97a1 1 0 00-.364-1.118L2.05 9.397c-.783-.57-.38-1.81.588-1.81h4.174a1 1 0 00.95-.69l1.287-3.97z" />
+      </svg>
+    </div>
+    <h3 class="mt-4 text-lg font-semibold text-gray-800">Satisfacción</h3>
+    <p class="mt-1 text-2xl font-bold text-yellow-600">
+      {{ statistics()?.satisfactionRate || 0 }}%
+    </p>
+  </div>
+</div>
+ </div>
+
+
+<!-- Sección: ¿Cómo funciona nuestro sistema? -->
+<div class="py-16 px-6 text-center">
+  <h1 class="text-3xl font-bold text-black">¿Cómo funciona nuestro sistema?</h1>
+  <h2 class="mt-2 text-lg text-gray-600">
+    Un proceso simple y transparente para que tu voz sea escuchada
+  </h2>
+
+  <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+    <!-- Card 1 -->
+    <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition">
+      <h1 class="text-xl font-semibold text-gray-900">Crea tu PQRS</h1>
+      <h2 class="mt-3 text-gray-600">
+        Completa el formulario con los detalles de tu petición, queja, reclamo o sugerencia.
+        El proceso es rápido y sencillo.
+      </h2>
+    </div>
+    <!-- Card 2 -->
+    <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition">
+      <h1 class="text-xl font-semibold text-gray-900">Seguimiento</h1>
+      <h2 class="mt-3 text-gray-600">
+        Recibe un número de radicado único para hacer seguimiento del estado de tu solicitud en tiempo real.
+      </h2>
+    </div>
+    <!-- Card 3 -->
+    <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition">
+      <h1 class="text-xl font-semibold text-gray-900">Resolución</h1>
+      <h2 class="mt-3 text-gray-600">
+        Nuestro equipo trabajará en tu solicitud y te notificaremos cuando esté resuelta,
+        junto con las acciones tomadas.
+      </h2>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- Sección: Inquietudes -->
+<div class="bg-orange-500 py-16 px-6 text-center">
+  <h1 class="text-3xl font-bold text-white">
+    ¿Tienes alguna inquietud sobre nuestro servicio?
+  </h1>
+  <h2 class="mt-2 text-lg text-orange-100">
+    No esperes más. Tu opinión nos ayuda a mejorar cada día.
+  </h2>
+</div>
+
+<!-- Footer -->
+<footer class="bg-gray-900 text-white py-12 px-6">
+  <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10">
+
+    <!-- Logo / Empresa -->
+    <div class="flex flex-col items-center md:items-start text-center md:text-left">
+      <div class="flex items-center space-x-2">
+        <div class="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center">
+          <span class="font-bold text-white text-xl">Q</span>
+        </div>
+        <h2 class="text-xl font-bold">QuejAPP</h2>
+      </div>
+      <p class="text-gray-400 mt-2">Sistema PQRS</p>
+    </div>
+
+    <!-- Información de contacto -->
+    <div class="flex flex-col items-center md:items-start">
+      <h3 class="text-lg font-semibold mb-4">Contacto</h3>
+      <div class="flex items-center space-x-2 mb-2">
+        <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M17.657 16.657L13.414 12.414C12.633 11.633 11.367 11.633 10.586 12.414L6.343 16.657M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2z" />
+        </svg>
+        <p class="text-gray-300">Calle 123 #45-67, Cartagena</p>
+      </div>
+      <div class="flex items-center space-x-2 mb-2">
+        <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M3 5h2l3.6 7.59-1.35 2.44A1 1 0 008 17h8a1 1 0 00.95-.68l3.34-10H5.21" />
+        </svg>
+        <p class="text-gray-300">+57 300 123 4567</p>
+      </div>
+      <div class="flex items-center space-x-2">
+        <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12H8m0 0l4-4m-4 4l4 4m4-8v8" />
+        </svg>
+        <p class="text-gray-300">contacto@quejapp.com</p>
+      </div>
+    </div>
+
+    <!-- Horarios -->
+    <div class="flex flex-col items-center md:items-start">
+      <h3 class="text-lg font-semibold mb-4">Horarios de atención</h3>
+      <div class="flex items-center space-x-2 mb-2">
+        <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M8 7V3m8 4V3m-9 4h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        <p class="text-gray-300">Lunes a Viernes: 8:00 AM - 6:00 PM</p>
+      </div>
+      <div class="flex items-center space-x-2">
+        <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M3 10h18M9 21h6m2-18a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2h10z" />
+        </svg>
+        <p class="text-gray-300">Sábados: 8:00 AM - 2:00 PM</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Línea inferior -->
+  <div class="mt-10 border-t border-gray-700 pt-4 text-center text-gray-500 text-sm">
+    © 2025 Transcaribe - Todos los derechos reservados
+
+    <!-- BOTÓN CHATBOT -->
+<button 
+  routerLink="/chatbot"
+  class="fixed bottom-6 right-6 bg-orange-600 hover:bg-orange-700 text-white p-4 rounded-full shadow-lg hover:scale-110 transition-all duration-300 z-50">
+
+  <!-- Icono chat -->
+  <svg xmlns="http://www.w3.org/2000/svg" 
+       class="w-6 h-6" 
+       fill="none" 
+       viewBox="0 0 24 24" 
+       stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+      d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4-.8L3 20l1.2-3.2A7.963 7.963 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+  </svg>
+
+</button>
+  </div>
+</footer>
