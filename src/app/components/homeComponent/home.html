@@ -135,7 +135,7 @@
     </div>
     <h3 class="mt-4 text-lg font-semibold text-gray-800">Días Promedio</h3>
     <p class="mt-1 text-2xl font-bold text-blue-600">
-      {{ statistics()?.averageDaysToResolve || 0 }} días
+      {{ (statistics()?.averageDaysToResolve || 0) |number: '1.0-1' }} días
 </p>  </div>
 
   <!-- Card 4: Satisfacción -->
