@@ -268,88 +268,124 @@
             </div>
             }
             
-            <!-- Modelo de Priorización -->
-             @if(selectedView() === 'overview'){
-            <div class="bg-white rounded-2xl shadow-lg p-6 mt-8">
+<!-- Modelo de Priorización -->
+@if(selectedView() === 'overview'){
+<div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6 mt-8 w-full overflow-hidden border border-gray-100">
 
-            <div class="flex items-center justify-between mb-6">
-                <div>
-                <h2 class="text-2xl font-bold text-gray-800">
-                    Modelo de Priorización
-                </h2>
+  <!-- Encabezado Responsive -->
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 border-b border-gray-100 pb-4">
+    <div>
+      <h2 class="text-xl sm:text-2xl font-bold text-gray-800">
+        Modelo de Priorización Inteligente
+      </h2>
+      <p class="text-gray-500 text-xs sm:text-sm mt-0.5">
+        PQRS ordenadas automáticamente según score de criticidad y tiempo
+      </p>
+    </div>
 
-                <p class="text-gray-500 text-sm">
-                    PQRS ordenadas automáticamente por prioridad
-                </p>
-                </div>
+    <div class="flex items-center justify-between md:justify-end gap-3">
+      <span class="text-xs sm:text-sm text-gray-500">
+        Mostrando top 10 de {{ priorityComplaints().length }}
+      </span>
+      <div class="bg-red-50 text-red-700 border border-red-200 px-3 py-1.5 rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap">
+        🔥 {{ priorityComplaints().length }} críticas
+      </div>
+    </div>
+  </div>
 
-                <p class="text-sm text-gray-500">
-                Mostrando las 10 PQRS más críticas de {{ priorityComplaints().length }}
-                </p>
+  <!-- Lista de PQRS Priorizadas -->
+  <div class="space-y-4">
+    @for(complaint of priorityComplaints().slice(0,10); track complaint.id){
 
-                <div class="bg-red-100 text-red-700 px-4 py-2 rounded-xl font-semibold">
-                {{ priorityComplaints().length }} críticas
-                </div>
+    <div 
+      (click)="openComplaint(complaint)"
+      class="group border border-gray-200 hover:border-blue-400 rounded-xl p-4 transition-all duration-200 cursor-pointer bg-white hover:bg-slate-50/50 hover:shadow-md relative overflow-hidden">
+      
+      <!-- Indicador lateral de color según prioridad -->
+      <div 
+        class="absolute left-0 top-0 bottom-0 w-1.5"
+        [ngClass]="{
+          'bg-red-500': complaint.priorityLevel === 'ALTA',
+          'bg-yellow-500': complaint.priorityLevel === 'MEDIA',
+          'bg-green-500': complaint.priorityLevel === 'BAJA'
+        }">
+      </div>
+
+      <!-- Fila Superior: Asunto, Razón y Badge de Nivel -->
+      <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-2 pl-2">
+        <div class="pr-2">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-mono font-bold text-gray-400">#{{ complaint.radicado || complaint.id?.substring(0,8) }}</span>
+            <h3 class="font-bold text-base sm:text-lg text-gray-800 group-hover:text-blue-600 transition">
+              {{ complaint.subject }}
+            </h3>
+          </div>
+
+          <p class="text-gray-600 text-xs sm:text-sm mt-1 line-clamp-2">
+            {{ complaint.reason }}
+          </p>
+        </div>
+
+        <!-- Badge Nivel de Prioridad -->
+        <span 
+          class="self-start sm:self-auto px-3 py-1 rounded-full text-xs font-bold text-white shadow-sm tracking-wide shrink-0"
+          [ngClass]="{
+            'bg-red-600': complaint.priorityLevel === 'ALTA',
+            'bg-yellow-500': complaint.priorityLevel === 'MEDIA',
+            'bg-green-600': complaint.priorityLevel === 'BAJA'
+          }">
+          {{ complaint.priorityLevel }}
+        </span>
+      </div>
+
+      <!-- Fila Inferior: Badges Informativos y Acción de Respuesta -->
+      <div class="flex flex-wrap items-center justify-between gap-2 mt-4 pt-3 border-t border-gray-100 pl-2">
+        
+        <!-- Contenedor de Badges -->
+        <div class="flex flex-wrap items-center gap-2 text-xs">
+          <span class="bg-orange-50 text-orange-700 border border-orange-200 px-2.5 py-1 rounded-lg font-bold">
+            Score: {{ complaint.priorityScore }}
+          </span>
+
+          <span class="bg-blue-50 text-blue-700 border border-blue-100 px-2.5 py-1 rounded-lg font-medium">
+            {{ complaint.type }}
+          </span>
+
+          <span class="bg-purple-50 text-purple-700 border border-purple-100 px-2.5 py-1 rounded-lg font-medium hidden sm:inline-block">
+            {{ complaint.category }}
+          </span>
+
+          <span 
+            class="px-2.5 py-1 rounded-lg font-semibold flex items-center gap-1"
+            [ngClass]="complaint.daysOpen >= 10 ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-700'">
+            ⏱️ {{ complaint.daysOpen }} días abierta
+          </span>
+        </div>
+
+        <!-- Botón Visual de Acción -->
+        <div class="text-xs font-bold text-blue-600 group-hover:text-blue-700 flex items-center gap-1 ml-auto sm:ml-0 pt-1 sm:pt-0">
+          <span>Atender PQRS</span>
+          <svg class="w-4 h-4 transform group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+          </svg>
+        </div>
+
+      </div>
+
+    </div>
+
+    } @empty {
+      <div class="text-center py-8 text-gray-500 text-sm">
+        No hay solicitudes pendientes en el modelo de priorización.
+      </div>
+    }
+
+  </div>
+</div>
+}
+
             </div>
-
-            <div class="space-y-4">
-
-            @for(complaint of priorityComplaints().slice(0,10); track complaint.id){
-
-            <div class="border border-gray-200 rounded-xl p-4 hover:shadow-md transition">
-
-            <div class="flex justify-between items-start">
-
-                <div>
-                <h3 class="font-bold text-lg text-gray-800">
-                    {{ complaint.subject }}
-                </h3>
-
-                <p class="text-gray-500 text-sm mt-1">
-                    {{ complaint.reason }}
-                </p>
-                </div>
-
-                <div
-                class="px-3 py-1 rounded-lg text-sm font-bold text-white"
-                [ngClass]="{
-                    'bg-red-500': complaint.priorityLevel === 'ALTA',
-                    'bg-yellow-500': complaint.priorityLevel === 'MEDIA',
-                    'bg-green-500': complaint.priorityLevel === 'BAJA'
-                }">
-
-                {{ complaint.priorityLevel }}
-                </div>
-
-            </div>
-
-            <div class="flex flex-wrap gap-3 mt-4 text-sm">
-
-                <span class="bg-orange-100 text-orange-700 px-3 py-1 rounded-lg">
-                Score: {{ complaint.priorityScore }}
-                </span>
-
-                <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg">
-                Tipo: {{ complaint.type }}
-                </span>
-
-                <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-lg">
-                Categoría: {{ complaint.category }}
-                </span>
-
-                <span class="bg-gray-100 text-gray-700 px-3 py-1 rounded-lg">
-                {{ complaint.daysOpen }} días abierta
-                </span>
-
-            </div>
-
-            </div>
-
-            }
-
-            </div>
-            </div>
-        }
+      
             <!-- Employees View -->
             @if (selectedView() === 'employees') {
             <div>
@@ -409,7 +445,7 @@
             </div>
             }
 
-
+        }
             <!-- Trends View -->
             @if (selectedView() === 'trends') {
             <div>
@@ -550,8 +586,5 @@
 
             }
 
-        </div>
-        }
+       
 
-    </div>
-</div>

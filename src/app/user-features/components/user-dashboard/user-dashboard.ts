@@ -70,7 +70,7 @@ export class UserDashboard implements OnInit {
     this.loadData();
   }
 
-  loadData() {
+loadData() {
     this.loading = true;
     this.error = null;
     let search: ComplaintSearchRequest = {
@@ -87,6 +87,17 @@ export class UserDashboard implements OnInit {
         this.complaints = response.content;
         this.totalItems = response.totalElements;
         this.loading = false;
+
+        // --- MAGIA DE UX: Redirección inteligente para usuarios nuevos ---
+        // Verificamos si es una carga por defecto (sin filtros de búsqueda)
+        const isDefaultSearch = !search.searchTerm && search.status === null;
+        
+        if (this.totalItems === 0 && isDefaultSearch) {
+          // NOTA: Cambia '/user/complaints/create' por la ruta exacta 
+          // que tengas en tu app para el formulario de creación.
+          this.router.navigate(['/user/complaint']); 
+        }
+        // -----------------------------------------------------------------
       },
       error: (error) => {
         this.error = 'Error loading complaints: ' + error.message;
@@ -94,7 +105,6 @@ export class UserDashboard implements OnInit {
         this.complaints = [];
       }
     });
-
   }
 
   viewComplaint(id: string) {

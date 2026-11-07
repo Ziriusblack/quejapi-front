@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth-service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RegisterRequest } from '../../../models/register-request';
@@ -11,12 +11,16 @@ import { passwordMatchValidator } from '../../../shared/validators/password-matc
   templateUrl: './register.html',
   styleUrl: './register.css'
 })
-export class Register {
+export class Register implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
-  role = signal(0);
   private activatedRoute = inject(ActivatedRoute);
-  errorMessage: string | null = null; // Agrega variable para el mensaje de error
+  
+  role = signal(0);
+  errorMessage: string | null = null; 
+  
+  // Nueva señal para bloquear fechas de menores de edad en el HTML
+  maxDate = signal<string>(''); 
 
   genderOptions = [
     {label:"Masculino", value:0},
@@ -40,14 +44,23 @@ export class Register {
     });    
   }
 
+  // Se ejecuta al cargar la página y calcula la fecha máxima (hace 18 años)
+  ngOnInit() {
+    const today = new Date();
+    const maxYear = today.getFullYear() - 18;
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    
+    // Formato YYYY-MM-DD requerido por el input type="date"
+    this.maxDate.set(`${maxYear}-${month}-${day}`);
+  }
+
   setRoleForForm(params:Params){
     if (this.checkifParamHasValue(params,'role')) {
       this.role.set(params['role'] === 'admin' ? 1 : 0);
       return;
     } 
-    
     this.role.set(0);
-    return;
   }
 
   checkifParamHasValue(params:any, key:string): boolean {
@@ -70,7 +83,7 @@ export class Register {
         this.router.navigate(['/login']); 
       },
       error: (error) => {        
-        this.errorMessage = 'Parace que hubo un error intente nuevamente un momento.'; // Mensaje de error
+        this.errorMessage = 'Parece que hubo un error. Intente nuevamente en un momento.';
       }
     });
   }
@@ -78,7 +91,6 @@ export class Register {
   goHome() {
     this.router.navigate(['/']); 
   }
-
 
   get firstname() { return this.registerForm.get('firstname'); }
   get lastname() { return this.registerForm.get('lastname'); }

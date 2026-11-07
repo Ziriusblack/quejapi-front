@@ -42,7 +42,7 @@
               </div>
               }
               @if (firstname?.hasError('minlength')) {
-              <div>
+              <div class="text-red-500 text-sm mt-1 font-medium">
                 El nombre debe tener al menos 2 caracteres de longitud.
               </div>
               }
@@ -57,6 +57,7 @@
             <input id="lastname" type="text" formControlName="lastname" placeholder="Pérez" class="block w-full px-3 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 
                      focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
             @if (lastname?.invalid && (lastname?.dirty || lastname?.touched)) {
+              
             <div class="alert">
               @if (lastname?.hasError('required')) {
               <div>
@@ -64,21 +65,22 @@
               </div>
               }
               @if (lastname?.hasError('minlength')) {
-              <div>
+              <div class="text-red-500 text-sm mt-1 font-medium">
                 El apellido debe tener al menos 2 caracteres de longitud.
               </div>
+              
               }
             </div>
             }
           </div>
 
-          <!-- Email -->
+  <!-- Email -->
           <div>
             <label for="email" class="block text-sm font-medium text-gray-900 mb-2">Correo electrónico</label>
             <input id="email" type="email" formControlName="email" placeholder="tu@email.com" class="block w-full px-3 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 
-                     focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
+                      focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
             @if (email?.invalid && (email?.dirty || email?.touched)) {
-            <div class="alert">
+            <div class="text-red-500 text-sm mt-1 font-medium">
               @if (email?.hasError('required')) {
               <div>
                 Este campo es obligatorio.
@@ -91,16 +93,15 @@
               }
             </div>
             }
-
           </div>
 
           <!-- Contraseña -->
           <div>
             <label for="password" class="block text-sm font-medium text-gray-900 mb-2">Contraseña</label>
             <input id="password" type="password" formControlName="password" placeholder="••••••••" class="block w-full px-3 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 
-                     focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
+                      focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
             @if (password?.invalid && (password?.dirty || password?.touched)) {
-            <div class="alert">
+            <div class="text-red-500 text-sm mt-1 font-medium">
               @if (password?.hasError('required')) {
               <div>
                 Este campo es obligatorio.
@@ -113,7 +114,6 @@
               }
             </div>
             }
-
           </div>
 
           <!-- Confirmar Contraseña -->
@@ -121,9 +121,9 @@
             <label for="confirmPassword" class="block text-sm font-medium text-gray-900 mb-2">Confirmar
               contraseña</label>
             <input id="confirmPassword" type="password" formControlName="confirmPassword" placeholder="••••••••" class="block w-full px-3 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 
-                     focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
+                      focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
             @if (confirmPassword?.invalid && (confirmPassword?.dirty || confirmPassword?.touched)) {
-            <div class="alert">
+            <div class="text-red-500 text-sm mt-1 font-medium">
               @if (confirmPassword?.hasError('required')) {
               <div>
                 Este campo es obligatorio.
@@ -143,7 +143,7 @@
             }
             @if (registerForm.hasError('passwordMismatch') && (registerForm.dirty || registerForm.touched))
             {
-            <div class="alert">
+            <div class="text-red-500 text-sm mt-1 font-medium">
               <div>
                 Las contraseñas deben coincidir.
               </div>
@@ -154,19 +154,21 @@
           <!-- Fecha de nacimiento -->
           <div>
             <label for="birthdate" class="block text-sm font-medium text-gray-900 mb-2">Fecha de nacimiento</label>
-            <input id="birthdate" type="date" formControlName="birthdate" class="block w-full px-3 py-3 border border-gray-300 rounded-lg text-gray-900 
-                     focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
+            <input id="birthdate" type="date" formControlName="birthdate" [max]="maxDate()" class="block w-full px-3 py-3 border border-gray-300 rounded-lg text-gray-900 
+                      focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all" />
+            
             @if (birthdate?.invalid && (birthdate?.dirty || birthdate?.touched)) {
-            <div class="alert">
-              @if (birthdate?.hasError('required')) {
-              <div>
-                Este campo es obligatorio.
+              <div class="text-red-500 text-sm mt-1 font-medium">
+                @if (birthdate?.hasError('required')) {
+                  <div>Este campo es obligatorio.</div>
+                }
               </div>
-              }
-            </div>
+            }
+            @if (birthdate?.touched && birthdate?.value) {
+              <!-- Opcional: Podrías mantener este mensaje si quisieras una doble validación visual, pero el [max] ya bloquea la selección. -->
+              <p class="text-red-500 text-sm mt-1 font-medium hidden">Debes ser mayor de edad para registrarte.</p>
             }
           </div>
-
           <!-- Género -->
           <div>
             <label for="gender" class="block text-sm font-medium text-gray-900 mb-2">Género</label>

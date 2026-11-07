@@ -1,9 +1,11 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router'; 
 import { PQRSStatistics } from '../../../models/pqrsstatistics';
 import { StatsService } from '../../services/stats-service';
 import { NavigationBar } from '../../../components/navigation-bar/navigation-bar';
+
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -22,6 +24,7 @@ export class AdminDashboard implements OnInit{
   
   selectedView = signal<'overview' | 'employees' | 'trends'|'analytics'>('overview');
   private pqrsService = inject(StatsService);
+  private router = inject(Router);
 
   ngOnInit(): void {
     this.loadStatistics();
@@ -133,4 +136,10 @@ export class AdminDashboard implements OnInit{
     }
   });
 }
+
+openComplaint(complaint: any): void {
+    // Redirige a la vista de respuesta. Ajusta '/admin/complaints' a tu ruta real si es diferente.
+    this.router.navigate(['/admin/complaints', complaint.id]);
+  }
 }
+
