@@ -56,22 +56,22 @@
         <!-- Content -->
         @if (!loading() && !error() && statistics()) {
         <div class="animate-fade-in">
-            <!-- Navigation Tabs -->
-            <div class="bg-white rounded-2xl shadow-lg p-2 mb-8 flex gap-2">
+           <!-- Navigation Tabs -->
+            <div class="bg-white rounded-2xl shadow-lg p-2 mb-8 flex gap-2 overflow-x-auto whitespace-nowrap w-full scrollbar-none">
                 <button (click)="changeView('overview')"
-                    [class]="selectedView() === 'overview' ? 'flex-1 py-4 px-6 bg-gradient-to-r  from-amber-400 to-orange-500 text-white font-semibold rounded-xl shadow-lg transition-all' : 'flex-1 py-4 px-6 text-gray-600 font-semibold rounded-xl hover:bg-gray-50 transition-all'">
+                    [class]="selectedView() === 'overview' ? 'min-w-[140px] flex-1 py-4 px-6 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-semibold rounded-xl shadow-lg transition-all text-center' : 'min-w-[140px] flex-1 py-4 px-6 text-gray-600 font-semibold rounded-xl hover:bg-gray-50 transition-all text-center'">
                     Vista General
                 </button>
                 <button (click)="changeView('employees')"
-                    [class]="selectedView() === 'employees' ? 'flex-1 py-4 px-6 bg-gradient-to-r  from-amber-400 to-orange-500 text-white font-semibold rounded-xl shadow-lg transition-all' : 'flex-1 py-4 px-6 text-gray-600 font-semibold rounded-xl hover:bg-gray-50 transition-all'">
+                    [class]="selectedView() === 'employees' ? 'min-w-[140px] flex-1 py-4 px-6 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-semibold rounded-xl shadow-lg transition-all text-center' : 'min-w-[140px] flex-1 py-4 px-6 text-gray-600 font-semibold rounded-xl hover:bg-gray-50 transition-all text-center'">
                     Por Empleado
                 </button>
                 <button (click)="changeView('trends')"
-                    [class]="selectedView() === 'trends' ? 'flex-1 py-4 px-6 bg-gradient-to-r  from-amber-400 to-orange-500 text-white font-semibold rounded-xl shadow-lg transition-all' : 'flex-1 py-4 px-6 text-gray-600 font-semibold rounded-xl hover:bg-gray-50 transition-all'">
+                    [class]="selectedView() === 'trends' ? 'min-w-[140px] flex-1 py-4 px-6 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-semibold rounded-xl shadow-lg transition-all text-center' : 'min-w-[140px] flex-1 py-4 px-6 text-gray-600 font-semibold rounded-xl hover:bg-gray-50 transition-all text-center'">
                     Tendencias
                 </button>
                 <button (click)="changeView('analytics')"
-                    [class]="selectedView() === 'analytics' ? 'flex-1 py-4 px-6 bg-gradient-to-r  from-amber-400 to-orange-500 text-white font-semibold rounded-xl shadow-lg transition-all' : 'flex-1 py-4 px-6 text-gray-600 font-semibold rounded-xl hover:bg-gray-50 transition-all'">
+                    [class]="selectedView() === 'analytics' ? 'min-w-[140px] flex-1 py-4 px-6 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-semibold rounded-xl shadow-lg transition-all text-center' : 'min-w-[140px] flex-1 py-4 px-6 text-gray-600 font-semibold rounded-xl hover:bg-gray-50 transition-all text-center'">
                     Power BI
                 </button>
             </div>
