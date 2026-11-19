@@ -23,29 +23,29 @@
   </div>
   }
 
-  <!-- 📄 Detalles del Radicado -->
+ <!-- 📄 Detalles del Radicado -->
   @if (!loading && !error && complaint) {
-  <div class="bg-gray-50 rounded-xl p-6 mb-8 border border-gray-200">
+  <div class="bg-gray-50 rounded-xl p-4 sm:p-6 mb-8 border border-gray-200 min-w-0">
     <h2 class="text-xl font-semibold text-gray-800 mb-4">Detalles del Radicado</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
-      <p><strong>ID:</strong> {{ complaint.reference }}</p>
-      <p><strong>Usuario:</strong> {{ showUserFullName(complaint.userProfile) }}</p>
-      <p><strong>Correo:</strong> {{ showUserEmail(complaint.userProfile) }}</p>
-      <p><strong>Estado:</strong> {{ showStatusName(complaint.status) }}</p>
-      <p><strong>Tipo:</strong> {{ showTypeName(complaint.type) }}</p>
-      <p><strong>Categoría:</strong> {{ showCategoryName(complaint.category) }}</p>
-      <p><strong>Asunto:</strong> {{ complaint.subject }}</p>
-      <p><strong>Descripción:</strong> {{ complaint.description }}</p>
-      <p><strong>Fecha Creación:</strong> {{ complaint.recievedDate | date:'short' }}</p>
-      <p><strong>Última Actualización:</strong> {{ complaint.updatedDate | date:'short' }}</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700 min-w-0">
+      <p class="min-w-0 break-words"><strong>ID:</strong> {{ complaint.reference }}</p>
+      <p class="min-w-0 break-words"><strong>Usuario:</strong> {{ showUserFullName(complaint.userProfile) }}</p>
+      <p class="min-w-0 break-words"><strong>Correo:</strong> {{ showUserEmail(complaint.userProfile) }}</p>
+      <p class="min-w-0 break-words"><strong>Estado:</strong> {{ showStatusName(complaint.status) }}</p>
+      <p class="min-w-0 break-words"><strong>Tipo:</strong> {{ showTypeName(complaint.type) }}</p>
+      <p class="min-w-0 break-words"><strong>Categoría:</strong> {{ showCategoryName(complaint.category) }}</p>
+      <p class="min-w-0 break-words"><strong>Asunto:</strong> {{ complaint.subject }}</p>
+      <p class="min-w-0 break-words whitespace-pre-line"><strong>Descripción:</strong> {{ complaint.description }}</p>
+      <p class="min-w-0 break-words"><strong>Fecha Creación:</strong> {{ complaint.recievedDate | date:'short' }}</p>
+      <p class="min-w-0 break-words"><strong>Última Actualización:</strong> {{ complaint.updatedDate | date:'short' }}</p>
     </div>
 
     @if (complaint.traceability && complaint.traceability.length > 0) {
-    <div class="mt-6">
+    <div class="mt-6 min-w-0">
       <h3 class="text-lg font-semibold text-orange-600 mb-3">Historial de Cambios</h3>
-      <ul class="list-disc pl-5 text-gray-600">
+      <ul class="list-disc pl-5 text-gray-600 space-y-1">
         @for (trace of complaint.traceability; track $index) {
-        <li>
+        <li class="break-words">
           <strong>{{ trace.date | date:'short' }}:</strong> {{ trace.status }} realizado por {{ showPerformedBy(trace)
           }}
         </li>
