@@ -14,7 +14,7 @@ export class StatsService {
     return this.http.get<PQRSStatistics>(`${this.apiUrl}/overview`, { params });
   }
 
-  getPriorityComplaints() {
-  return this.http.get<any[]>('http://localhost:8080/api/stats/priorities');
-}
+  public getPriorityComplaints() {
+    return this.http.get<any[]>(`${this.apiUrl}/priorities`);
+  }
 }
