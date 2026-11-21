@@ -10,6 +10,7 @@ import { CreateComplaint } from './user-features/components/create-complaint/cre
 import { ManageComplaint } from './admin-features/components/manage-complaint/manage-complaint';
 import { ViewComplaint } from './user-features/components/view-complaint/view-complaint';
 import { ListComplaints } from './admin-features/components/list-complaints/list-complaints';
+import { ForgotPassword } from './components/forgot-password/forgot-password';
 
 /* ✅ NUEVO IMPORT */
 import { Chatbot } from './chatbot/chatbot';
@@ -25,6 +26,7 @@ export const routes: Routes = [
 
     { path: 'register/:role', component: Register },
     { path: 'login', component: Login },
+    { path: 'forgot-password', component: ForgotPassword },
 
     /* ✅ RUTA CHATBOT (NO AFECTA NADA EXISTENTE) */
     { path: 'chatbot', component: Chatbot },

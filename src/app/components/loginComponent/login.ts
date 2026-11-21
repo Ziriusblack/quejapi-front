@@ -21,6 +21,7 @@ export class Login {
 
   errorMessage: string | null = null; // Agrega variable para el mensaje de error
   isLoading: boolean = false; // Variable para el estado de carga
+  showPassword = false;
 
   onSubmit() {
     this.errorMessage = null; // Limpia el mensaje antes de intentar login

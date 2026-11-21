@@ -17,11 +17,10 @@ export class Register implements OnInit {
   private activatedRoute = inject(ActivatedRoute);
   
   role = signal(0);
-  errorMessage: string | null = null; 
-  
-  // Nueva señal para bloquear fechas de menores de edad en el HTML
+  errorMessage: string | null = null;
   maxDate = signal<string>(''); 
-
+  showPassword = false;
+  showConfirmPassword = false;
   genderOptions = [
     {label:"Masculino", value:0},
     {label:"Femenino", value:1},
