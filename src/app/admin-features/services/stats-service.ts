@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { PQRSStatistics } from '../../models/pqrsstatistics';
 import { environment } from '../../../environments/environment';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class StatsService {
     return this.http.get<PQRSStatistics>(`${this.apiUrl}/overview`, { params });
   }
 
-  public getPriorityComplaints() {
-    return this.http.get<any[]>(`${this.apiUrl}/priorities`);
-  }
+  getPriorityComplaints(params?: any): Observable<any[]> {
+      return this.http.get<any[]>(`${this.apiUrl}/priorities`, { params });
+    }
 }

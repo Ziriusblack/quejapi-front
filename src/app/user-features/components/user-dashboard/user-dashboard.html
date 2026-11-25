@@ -153,6 +153,22 @@
                             </div>
                         </div>
 
+                        <!-- Prioridad (Red Neuronal) -->
+                        <div>
+                            <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Prioridad</p>
+                            <div class="flex items-center gap-2">
+                                <span [class]="classForPriority(complaint.predictedPriority)">
+                                    {{ labelForPriority(complaint.predictedPriority) }}
+                                </span>
+                                @if (complaint.priorityConfidence) {
+                                <span class="text-xs text-gray-400">
+                                    ({{ (complaint.priorityConfidence * 100).toFixed(0) }}%)
+                                </span>
+                                }
+                            </div>
+                        </div>
+
+
                         <!-- Fecha de Creación -->
                         <div>
                             <p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">Fecha de Creación

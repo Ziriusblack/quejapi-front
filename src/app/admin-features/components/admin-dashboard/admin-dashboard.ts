@@ -55,12 +55,14 @@ export class AdminDashboard implements OnInit{
 
   applyFilters(): void {
     this.loadStatistics();
+    this.loadPriorityComplaints();
   }
 
   clearFilters(): void {
     this.startDate.set('');
     this.endDate.set('');
     this.loadStatistics();
+    this.loadPriorityComplaints();
   }
 
   getStatusPercentage(count: number): number {
@@ -127,15 +129,56 @@ export class AdminDashboard implements OnInit{
     return Math.round((resolved / received) * 100);
   }
   loadPriorityComplaints(): void {
-  this.pqrsService.getPriorityComplaints().subscribe({
-    next: (data) => {
-      this.priorityComplaints.set(data);
-    },
-    error: (err) => {
-      console.error('Error cargando prioridades', err);
+      const params: any = {};
+      if (this.startDate()) params.startDate = this.startDate();
+      if (this.endDate()) params.endDate = this.endDate();
+
+      this.pqrsService.getPriorityComplaints(params).subscribe({
+        next: (data) => {
+          const priorityWeight: Record<string, number> = {
+            ALTA: 3,
+            MEDIA: 2,
+            BAJA: 1,
+          };
+
+          const sorted = [...data].sort((a, b) => {
+            const pA = priorityWeight[this.getResolvedPriority(a)] || 0;
+            const pB = priorityWeight[this.getResolvedPriority(b)] || 0;
+            if (pB !== pA) return pB - pA;
+            return (b.priorityScore || 0) - (a.priorityScore || 0);
+          });
+
+          this.priorityComplaints.set(sorted);
+        },
+        error: (err) => {
+          console.error('Error cargando prioridades', err);
+        }
+      });
     }
-  });
-}
+
+  getResolvedPriority(complaint: any): string {
+    return (complaint.predictedPriority || complaint.priorityLevel || 'SIN EVALUAR').toUpperCase();
+  }
+
+  getHighPriorityCount(): number {
+    return this.priorityComplaints().filter(c => this.getResolvedPriority(c) === 'ALTA').length;
+  }
+
+typeNames = ['Petición', 'Queja', 'Reclamo', 'Sugerencia', 'Felicitación'];
+  categoryNames = [
+    'Servicio de Buses', 'Tarifas y Pagos', 'Horarios', 'Rutas',
+    'Infraestructura', 'Atención al cliente', 'Accesibilidad', 'Seguridad', 'Otros'
+  ];
+
+  getTypeLabel(type: any): string {
+    const idx = Number(type);
+    return !isNaN(idx) && this.typeNames[idx] ? this.typeNames[idx] : String(type ?? 'PQRS');
+  }
+
+  getCategoryLabel(category: any): string {
+    const idx = Number(category);
+    return !isNaN(idx) && this.categoryNames[idx] ? this.categoryNames[idx] : String(category ?? 'General');
+  }
 
 openComplaint(complaint: any): void {
     // Redirige a la vista de respuesta. Ajusta '/admin/complaints' a tu ruta real si es diferente.

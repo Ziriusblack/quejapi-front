@@ -152,4 +152,21 @@ export class ListComplaints {
     }
     return "Desconocido";
   }
+  classForPriority(priority?: string): string {
+    let classes = 'px-2.5 py-0.5 text-xs font-semibold rounded-full whitespace-nowrap inline-block ';
+    switch (priority?.toUpperCase()) {
+      case 'ALTA':
+        return classes + 'bg-red-100 text-red-700 border border-red-300';
+      case 'MEDIA':
+        return classes + 'bg-yellow-100 text-yellow-700 border border-yellow-300';
+      case 'BAJA':
+        return classes + 'bg-green-100 text-green-700 border border-green-300';
+      default:
+        return classes + 'bg-gray-100 text-gray-600 border border-gray-300';
+    }
+  }
+
+  labelForPriority(priority?: string): string {
+    return priority ? priority.toUpperCase() : 'Sin evaluar';
+  }
 }

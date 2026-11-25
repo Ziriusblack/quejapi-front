@@ -1,6 +1,8 @@
 export interface CreatedComplaint {
-    id: number;
+    id: number | string;
     reference: String;
     subject: String;  
-    description: String;    
+    description: String;        
+    predictedPriority?: string;    
+    priorityConfidence?: number;   
 }

@@ -78,6 +78,7 @@
                             <th class="px-4 py-3 text-left text-sm font-semibold text-white">Tipo</th>
                             <th class="px-4 py-3 text-left text-sm font-semibold text-white">Estado</th>
                             <th class="px-4 py-3 text-left text-sm font-semibold text-white">Tiempo estimado</th>
+                            <th class="px-4 py-3 text-left text-sm font-semibold text-white">Prioridad</th>
                             <th class="px-4 py-3 text-left text-sm font-semibold text-white">Fecha de creación</th>
                             <th class="px-4 py-3 text-left text-sm font-semibold text-white">Acciones</th>
                         </tr>
@@ -145,6 +146,18 @@
                                             clip-rule="evenodd" />
                                     </svg>
                                     <span class="text-sm text-gray-600">Por Determinar</span>
+                                    }
+                                </div>
+                            </td>
+                            <td class="px-4 py-2 whitespace-nowrap">
+                                <div class="flex items-center gap-1.5">
+                                    <span [class]="classForPriority(complaint.predictedPriority)">
+                                        {{ labelForPriority(complaint.predictedPriority) }}
+                                    </span>
+                                    @if (complaint.priorityConfidence) {
+                                    <span class="text-xs text-gray-400">
+                                        ({{ (complaint.priorityConfidence * 100).toFixed(0) }}%)
+                                    </span>
                                     }
                                 </div>
                             </td>

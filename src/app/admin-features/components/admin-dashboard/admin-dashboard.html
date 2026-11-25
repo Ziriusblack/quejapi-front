@@ -56,25 +56,31 @@
         <!-- Content -->
         @if (!loading() && !error() && statistics()) {
         <div class="animate-fade-in">
-           <!-- Navigation Tabs -->
-            <div class="bg-white rounded-2xl shadow-lg p-2 mb-8 flex gap-2 overflow-x-auto whitespace-nowrap w-full scrollbar-none">
-                <button (click)="changeView('overview')"
-                    [class]="selectedView() === 'overview' ? 'min-w-[140px] flex-1 py-4 px-6 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-semibold rounded-xl shadow-lg transition-all text-center' : 'min-w-[140px] flex-1 py-4 px-6 text-gray-600 font-semibold rounded-xl hover:bg-gray-50 transition-all text-center'">
-                    Vista General
-                </button>
-                <button (click)="changeView('employees')"
-                    [class]="selectedView() === 'employees' ? 'min-w-[140px] flex-1 py-4 px-6 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-semibold rounded-xl shadow-lg transition-all text-center' : 'min-w-[140px] flex-1 py-4 px-6 text-gray-600 font-semibold rounded-xl hover:bg-gray-50 transition-all text-center'">
-                    Por Empleado
-                </button>
-                <button (click)="changeView('trends')"
-                    [class]="selectedView() === 'trends' ? 'min-w-[140px] flex-1 py-4 px-6 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-semibold rounded-xl shadow-lg transition-all text-center' : 'min-w-[140px] flex-1 py-4 px-6 text-gray-600 font-semibold rounded-xl hover:bg-gray-50 transition-all text-center'">
-                    Tendencias
-                </button>
-                <button (click)="changeView('analytics')"
-                    [class]="selectedView() === 'analytics' ? 'min-w-[140px] flex-1 py-4 px-6 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-semibold rounded-xl shadow-lg transition-all text-center' : 'min-w-[140px] flex-1 py-4 px-6 text-gray-600 font-semibold rounded-xl hover:bg-gray-50 transition-all text-center'">
-                    Power BI
-                </button>
-            </div>
+        <!-- Navigation Tabs -->
+                    <div class="relative mb-8">
+                    <div class="bg-white rounded-2xl shadow-lg p-2 flex gap-2 overflow-x-auto whitespace-nowrap w-full scroll-smooth pr-10 sm:pr-2">
+                        <button (click)="changeView('overview')"
+                            [class]="selectedView() === 'overview' ? 'min-w-[135px] shrink-0 sm:flex-1 py-3.5 px-5 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-semibold rounded-xl shadow-lg transition-all text-center text-sm sm:text-base' : 'min-w-[135px] shrink-0 sm:flex-1 py-3.5 px-5 text-gray-600 font-semibold rounded-xl hover:bg-gray-50 transition-all text-center text-sm sm:text-base'">
+                            Vista General
+                        </button>
+                        <button (click)="changeView('employees')"
+                            [class]="selectedView() === 'employees' ? 'min-w-[135px] shrink-0 sm:flex-1 py-3.5 px-5 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-semibold rounded-xl shadow-lg transition-all text-center text-sm sm:text-base' : 'min-w-[135px] shrink-0 sm:flex-1 py-3.5 px-5 text-gray-600 font-semibold rounded-xl hover:bg-gray-50 transition-all text-center text-sm sm:text-base'">
+                            Por Empleado
+                        </button>
+                        <button (click)="changeView('trends')"
+                            [class]="selectedView() === 'trends' ? 'min-w-[135px] shrink-0 sm:flex-1 py-3.5 px-5 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-semibold rounded-xl shadow-lg transition-all text-center text-sm sm:text-base' : 'min-w-[135px] shrink-0 sm:flex-1 py-3.5 px-5 text-gray-600 font-semibold rounded-xl hover:bg-gray-50 transition-all text-center text-sm sm:text-base'">
+                            Tendencias
+                        </button>
+                        <button (click)="changeView('analytics')"
+                            [class]="selectedView() === 'analytics' ? 'min-w-[135px] shrink-0 sm:flex-1 py-3.5 px-5 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-semibold rounded-xl shadow-lg transition-all text-center text-sm sm:text-base' : 'min-w-[135px] shrink-0 sm:flex-1 py-3.5 px-5 text-gray-600 font-semibold rounded-xl hover:bg-gray-50 transition-all text-center text-sm sm:text-base'">
+                            Power BI
+                        </button>
+                    </div>
+                    <!-- Indicador visual de scroll horizontal en móvil -->
+                    <div class="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-white via-white/80 to-transparent rounded-r-2xl flex items-center justify-end pr-2 sm:hidden">
+                        <span class="text-orange-500 font-bold text-base">›</span>
+                    </div>
+                    </div>
 
             <!-- Overview View -->
             @if(selectedView() === 'overview') {
@@ -276,10 +282,10 @@
   <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 border-b border-gray-100 pb-4">
     <div>
       <h2 class="text-xl sm:text-2xl font-bold text-gray-800">
-        Modelo de Priorización Inteligente
+        Modelo de Priorización Inteligente (Red Neuronal)
       </h2>
       <p class="text-gray-500 text-xs sm:text-sm mt-0.5">
-        PQRS ordenadas automáticamente según score de criticidad y tiempo
+        PQRS clasificadas por Red Neuronal TensorFlow y ordenadas por criticidad y tiempo
       </p>
     </div>
 
@@ -288,7 +294,7 @@
         Mostrando top 10 de {{ priorityComplaints().length }}
       </span>
       <div class="bg-red-50 text-red-700 border border-red-200 px-3 py-1.5 rounded-xl font-bold text-xs sm:text-sm whitespace-nowrap">
-        🔥 {{ priorityComplaints().length }} críticas
+        🔥 {{ getHighPriorityCount() }} prioridad alta
       </div>
     </div>
   </div>
@@ -301,41 +307,50 @@
       (click)="openComplaint(complaint)"
       class="group border border-gray-200 hover:border-blue-400 rounded-xl p-4 transition-all duration-200 cursor-pointer bg-white hover:bg-slate-50/50 hover:shadow-md relative overflow-hidden">
       
-      <!-- Indicador lateral de color según prioridad -->
+      <!-- Indicador lateral de color según prioridad de la Red Neuronal -->
       <div 
         class="absolute left-0 top-0 bottom-0 w-1.5"
         [ngClass]="{
-          'bg-red-500': complaint.priorityLevel === 'ALTA',
-          'bg-yellow-500': complaint.priorityLevel === 'MEDIA',
-          'bg-green-500': complaint.priorityLevel === 'BAJA'
+          'bg-red-500': getResolvedPriority(complaint) === 'ALTA',
+          'bg-yellow-500': getResolvedPriority(complaint) === 'MEDIA',
+          'bg-green-500': getResolvedPriority(complaint) === 'BAJA',
+          'bg-gray-400': getResolvedPriority(complaint) === 'SIN EVALUAR'
         }">
       </div>
 
-      <!-- Fila Superior: Asunto, Razón y Badge de Nivel -->
+      <!-- Fila Superior: Asunto, Razón y Badge de Prioridad IA -->
       <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-2 pl-2">
         <div class="pr-2">
           <div class="flex items-center gap-2">
-            <span class="text-xs font-mono font-bold text-gray-400">#{{ complaint.radicado || complaint.id?.substring(0,8) }}</span>
+            <span class="text-xs font-mono font-bold text-gray-400">#{{ complaint.radicado || complaint.reference || complaint.id?.substring(0,8) }}</span>
             <h3 class="font-bold text-base sm:text-lg text-gray-800 group-hover:text-blue-600 transition">
               {{ complaint.subject }}
             </h3>
           </div>
 
           <p class="text-gray-600 text-xs sm:text-sm mt-1 line-clamp-2">
-            {{ complaint.reason }}
+            {{ complaint.reason || complaint.description }}
           </p>
         </div>
 
-        <!-- Badge Nivel de Prioridad -->
-        <span 
-          class="self-start sm:self-auto px-3 py-1 rounded-full text-xs font-bold text-white shadow-sm tracking-wide shrink-0"
-          [ngClass]="{
-            'bg-red-600': complaint.priorityLevel === 'ALTA',
-            'bg-yellow-500': complaint.priorityLevel === 'MEDIA',
-            'bg-green-600': complaint.priorityLevel === 'BAJA'
-          }">
-          {{ complaint.priorityLevel }}
-        </span>
+        <!-- Badge Nivel de Prioridad + Confianza -->
+        <div class="flex items-center gap-2 self-start sm:self-auto shrink-0">
+          <span 
+            class="px-3 py-1 rounded-full text-xs font-bold text-white shadow-sm tracking-wide"
+            [ngClass]="{
+              'bg-red-600': getResolvedPriority(complaint) === 'ALTA',
+              'bg-yellow-500': getResolvedPriority(complaint) === 'MEDIA',
+              'bg-green-600': getResolvedPriority(complaint) === 'BAJA',
+              'bg-gray-500': getResolvedPriority(complaint) === 'SIN EVALUAR'
+            }">
+            {{ getResolvedPriority(complaint) }}
+          </span>
+          @if (complaint.priorityConfidence) {
+          <span class="text-xs font-semibold text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full border border-gray-200">
+            {{ (complaint.priorityConfidence * 100).toFixed(0) }}% IA
+          </span>
+          }
+        </div>
       </div>
 
       <!-- Fila Inferior: Badges Informativos y Acción de Respuesta -->
@@ -343,23 +358,27 @@
         
         <!-- Contenedor de Badges -->
         <div class="flex flex-wrap items-center gap-2 text-xs">
+@if (complaint.priorityScore !== undefined) {
           <span class="bg-orange-50 text-orange-700 border border-orange-200 px-2.5 py-1 rounded-lg font-bold">
             Score: {{ complaint.priorityScore }}
           </span>
+          }
 
           <span class="bg-blue-50 text-blue-700 border border-blue-100 px-2.5 py-1 rounded-lg font-medium">
-            {{ complaint.type }}
+            {{ getTypeLabel(complaint.type) }}
           </span>
 
           <span class="bg-purple-50 text-purple-700 border border-purple-100 px-2.5 py-1 rounded-lg font-medium hidden sm:inline-block">
-            {{ complaint.category }}
+            {{ getCategoryLabel(complaint.category) }}
           </span>
 
+          @if (complaint.daysOpen !== undefined) {
           <span 
             class="px-2.5 py-1 rounded-lg font-semibold flex items-center gap-1"
             [ngClass]="complaint.daysOpen >= 10 ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-700'">
             ⏱️ {{ complaint.daysOpen }} días abierta
           </span>
+          }
         </div>
 
         <!-- Botón Visual de Acción -->
@@ -456,10 +475,10 @@
                     <p class="text-gray-600 mt-2">Evolución de PQRS por mes</p>
                 </div>
 
-                <!-- Gráfico de Barras -->
-                <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
-                    <div class="flex gap-4 mb-6">
-                        <div class="flex items-center gap-3 text-sm">
+ <!-- Gráfico de Barras -->
+                <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-8 mb-8 min-w-0 overflow-hidden">
+                    <div class="flex flex-wrap gap-4 mb-6">
+                        <div class="flex items-center gap-4 text-sm">
                             <div class="flex items-center gap-2">
                                 <div class="w-6 h-3 bg-gradient-to-r from-blue-500 to-blue-600 rounded"></div>
                                 <span class="font-semibold text-gray-700">Recibidas</span>
@@ -471,32 +490,33 @@
                         </div>
                     </div>
 
-                    <div class="flex gap-4">
-                        <div class="flex flex-col justify-between py-4 text-xs font-semibold text-gray-500">
-                            <span>{{ getMaxTrendValue() }}</span>
-                            <span>{{ (getMaxTrendValue() / 2).toFixed(0) }}</span>
-                            <span>0</span>
-                        </div>
-
-                        <div class="flex-1 flex items-end gap-6 p-4 bg-gray-50 rounded-xl min-h-80">
-                            @for (trend of statistics()!.monthlyTrends; track $index) {
-                            <div class="flex-1 flex flex-col items-center gap-2">
-                                <div class="w-full flex items-end justify-center gap-2 h-64">
-                                    <div class="w-5 bg-gradient-to-t from-blue-500 to-blue-600 rounded-t-lg hover:opacity-80 transition-all cursor-pointer shadow-lg"
-                                        [style.height.%]="getTrendBarHeight(trend.totalReceived)"
-                                        [title]="'Recibidas: ' + trend.totalReceived">
-                                    </div>
-                                    <div class="w-5 bg-gradient-to-t from-green-500 to-green-600 rounded-t-lg hover:opacity-80 transition-all cursor-pointer shadow-lg"
-                                        [style.height.%]="getTrendBarHeight(trend.totalResolved)"
-                                        [title]="'Resueltas: ' + trend.totalResolved">
-                                    </div>
-                                </div>
-                                <span class="text-xs font-semibold text-gray-600 text-center">{{
-                                    formatMonth(trend.month)
-                                    }}</span>
+                    <div class="overflow-x-auto pb-2">
+                        <div class="flex gap-3 sm:gap-4 min-w-[420px] sm:min-w-0">
+                            <div class="flex flex-col justify-between py-4 text-xs font-semibold text-gray-500 shrink-0">
+                                <span>{{ getMaxTrendValue() }}</span>
+                                <span>{{ (getMaxTrendValue() / 2).toFixed(0) }}</span>
+                                <span>0</span>
                             </div>
-                            }
 
+                            <div class="flex-1 flex items-end gap-3 sm:gap-6 p-3 sm:p-4 bg-gray-50 rounded-xl min-h-80 min-w-0">
+                                @for (trend of statistics()!.monthlyTrends; track $index) {
+                                <div class="flex-1 min-w-[54px] flex flex-col items-center gap-2">
+                                    <div class="w-full flex items-end justify-center gap-1.5 sm:gap-2 h-64">
+                                        <div class="w-4 sm:w-5 bg-gradient-to-t from-blue-500 to-blue-600 rounded-t-lg hover:opacity-80 transition-all cursor-pointer shadow-lg"
+                                            [style.height.%]="getTrendBarHeight(trend.totalReceived)"
+                                            [title]="'Recibidas: ' + trend.totalReceived">
+                                        </div>
+                                        <div class="w-4 sm:w-5 bg-gradient-to-t from-green-500 to-green-600 rounded-t-lg hover:opacity-80 transition-all cursor-pointer shadow-lg"
+                                            [style.height.%]="getTrendBarHeight(trend.totalResolved)"
+                                            [title]="'Resueltas: ' + trend.totalResolved">
+                                        </div>
+                                    </div>
+                                    <span class="text-[11px] sm:text-xs font-semibold text-gray-600 text-center leading-tight">{{
+                                        formatMonth(trend.month)
+                                        }}</span>
+                                </div>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -585,6 +605,3 @@
             </div>
 
             }
-
-       
-
