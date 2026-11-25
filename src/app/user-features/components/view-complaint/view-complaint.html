@@ -18,10 +18,10 @@
   </div><br>
   }
 
-  <div class="flex justify-between items-center mt-6">
+  <div class="flex justify-between items-center mt-6 mb-4">
     <!-- Botón Volver -->
     <a routerLink="/user"
-      class="bg-white border border-orange-600 text-orange-600 font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-orange-50 transition  flex items-center gap-2">
+      class="bg-white border border-orange-600 text-orange-600 font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-orange-50 transition flex items-center gap-2">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left"
         viewBox="0 0 16 16">
         <path fill-rule="evenodd"
@@ -31,38 +31,75 @@
     </a>
   </div>
 
-<!-- Complaint Details -->
+  <!-- Complaint Details -->
   @if (!loading && !error && complaint) {
   <div class="bg-white shadow-lg rounded-xl p-4 sm:p-6 space-y-4 min-w-0">
     <h2 class="text-xl font-semibold text-gray-800">Información Básica</h2>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 min-w-0">
       <p class="min-w-0 break-words"><span class="font-medium text-gray-700">ID del Radicado:</span> {{ complaint.reference }}</p>
-      <p class="min-w-0 break-words"><span class="font-medium text-gray-700">Nombre del Usuario:</span> {{ showUserFullName(complaint.userProfile)
-        }}</p>
-      <p class="min-w-0 break-words"><span class="font-medium text-gray-700">Correo Electrónico:</span> {{ showUserEmail(complaint.userProfile) }}
-      </p>
+      <p class="min-w-0 break-words"><span class="font-medium text-gray-700">Nombre del Usuario:</span> {{ showUserFullName(complaint.userProfile) }}</p>
+      <p class="min-w-0 break-words"><span class="font-medium text-gray-700">Correo Electrónico:</span> {{ showUserEmail(complaint.userProfile) }}</p>
       <p class="min-w-0 break-words"><span class="font-medium text-gray-700">Estado:</span> {{ showStatusName(complaint.status) }}</p>
       <p class="min-w-0 break-words"><span class="font-medium text-gray-700">Tipo:</span> {{ showTypeName(complaint.type) }}</p>
       <p class="min-w-0 break-words"><span class="font-medium text-gray-700">Categoría:</span> {{ showCategoryName(complaint.category) }}</p>
       <p class="min-w-0 break-words md:col-span-2"><span class="font-medium text-gray-700">Asunto:</span> {{ complaint.subject }}</p>
       <p class="min-w-0 break-words whitespace-pre-line md:col-span-2"><span class="font-medium text-gray-700">Descripción:</span> {{ complaint.description }}</p>
-      <p class="min-w-0 break-words"><span class="font-medium text-gray-700">Fecha de Creación:</span> {{ complaint.recievedDate | date:'short' }}
-      </p>
-      <p class="min-w-0 break-words"><span class="font-medium text-gray-700">Última Actualización:</span> {{ complaint.updatedDate | date:'short' }}
-      </p>
+      <p class="min-w-0 break-words"><span class="font-medium text-gray-700">Fecha de Creación:</span> {{ complaint.recievedDate | date:'short' }}</p>
+      <p class="min-w-0 break-words"><span class="font-medium text-gray-700">Última Actualización:</span> {{ complaint.updatedDate | date:'short' }}</p>
     </div>
+
+    <!-- Estimación IA de Tiempo de Respuesta -->
+    @if (cargandoPrediccion()) {
+    <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 text-sm text-gray-600">
+      Calculando estimación de tiempo de respuesta con IA...
+    </div>
+    } @else if (prediccionTiempo(); as pred) {
+    <div class="bg-orange-50/60 border border-orange-200 rounded-lg p-4 space-y-3">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <span class="text-sm font-semibold text-gray-800">Tiempo estimado de respuesta (IA):</span>
+        <span class="px-3 py-1 text-xs font-bold rounded-full"
+          [class.bg-emerald-100]="pred.prediccion === 'MuyRapido'"
+          [class.text-emerald-800]="pred.prediccion === 'MuyRapido'"
+          [class.bg-sky-100]="pred.prediccion === 'Rapido'"
+          [class.text-sky-800]="pred.prediccion === 'Rapido'"
+          [class.bg-amber-100]="pred.prediccion === 'Lento'"
+          [class.text-amber-800]="pred.prediccion === 'Lento'"
+          [class.bg-rose-100]="pred.prediccion === 'MuyLento'"
+          [class.text-rose-800]="pred.prediccion === 'MuyLento'">
+          {{ pred.prediccion_legible }} ({{ pred.confianza }}% confianza)
+        </span>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+        <div class="p-2 bg-white border border-gray-200 rounded-md text-center">
+          <span class="block font-medium text-gray-700">Muy rápido</span>
+          <span class="font-semibold text-gray-900">{{ pred.probabilidades['MuyRapido'] }}%</span>
+        </div>
+        <div class="p-2 bg-white border border-gray-200 rounded-md text-center">
+          <span class="block font-medium text-gray-700">Rápido</span>
+          <span class="font-semibold text-gray-900">{{ pred.probabilidades['Rapido'] }}%</span>
+        </div>
+        <div class="p-2 bg-white border border-gray-200 rounded-md text-center">
+          <span class="block font-medium text-gray-700">Lento</span>
+          <span class="font-semibold text-gray-900">{{ pred.probabilidades['Lento'] }}%</span>
+        </div>
+        <div class="p-2 bg-white border border-gray-200 rounded-md text-center">
+          <span class="block font-medium text-gray-700">Muy lento</span>
+          <span class="font-semibold text-gray-900">{{ pred.probabilidades['MuyLento'] }}%</span>
+        </div>
+      </div>
+    </div>
+    }
 
     @if(complaint.employeeProfile) {
     <h2 class="text-xl font-semibold text-orange-500">Detalles de Respuesta</h2>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 min-w-0">
       <p class="min-w-0 break-words"><span class="font-medium text-gray-700">Empleado:</span> {{ showUserFullName(complaint.employeeProfile) }}</p>
-      <p class="min-w-0 break-words"><span class="font-medium text-gray-700">Correo Electrónico:</span> {{ showUserEmail(complaint.employeeProfile)
-        }}</p>
-      <p class="min-w-0 break-words"><span class="font-medium text-gray-700">Dependencia:</span> {{ complaint.department}}</p>
-      <p class="min-w-0 break-words"><span class="font-medium text-gray-700">Fecha de Respuesta</span> {{ complaint.responseDate | date:'short' }}
-      </p>
+      <p class="min-w-0 break-words"><span class="font-medium text-gray-700">Correo Electrónico:</span> {{ showUserEmail(complaint.employeeProfile) }}</p>
+      <p class="min-w-0 break-words"><span class="font-medium text-gray-700">Dependencia:</span> {{ complaint.department }}</p>
+      <p class="min-w-0 break-words"><span class="font-medium text-gray-700">Fecha de Respuesta:</span> {{ complaint.responseDate | date:'short' }}</p>
       <p class="min-w-0 break-words whitespace-pre-line md:col-span-2"><span class="font-medium text-gray-700">Respuesta:</span> {{ complaint.response }}</p>
     </div>
     }
@@ -84,3 +121,5 @@
     }
   </div>
   }
+
+</div>
